@@ -27,6 +27,8 @@ Partida* nueva_partida(char* palabra_secreta);
 
 void nuevo_intento(char* intento);
 
-void comenzar_partida(Partida* partida);
+void comenzar_partida(Partida* partida, char** lista_validas);
 
 bool string_equals(char *string1, char *string2);
+
+int word_is_valid(char* string, char** lista_validas);

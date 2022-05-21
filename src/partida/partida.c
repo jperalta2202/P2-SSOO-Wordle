@@ -22,10 +22,10 @@ void nuevo_intento(char* intento){
 
 }
 
-void comenzar_partida(Partida* partida){
+void comenzar_partida(Partida* partida, char** lista_validas){
 
     int run = 1;
-    char* intento;
+    char intento[6];
 
     while(run) {
 
@@ -33,6 +33,7 @@ void comenzar_partida(Partida* partida){
         scanf("%s", intento);
 
         printf("Ingresaste la palabra %s \n", intento);
+        int valida = word_is_valid(intento, lista_validas);
 
 
         if (string_equals(partida->palabra_secreta, intento)){
@@ -47,3 +48,18 @@ void comenzar_partida(Partida* partida){
     }
     
 }
+
+int word_is_valid(char* string, char** lista_validas)
+{
+    int largo = 12972;
+    int word_is_in_list = 1; // 1 significa que no está, 0 que si
+    for (int i = 0; i < largo; i++) {
+        int comparacion = strcmp(string, lista_validas[i]);
+        if (comparacion == 0){
+            printf("\nPALABRA ES VALIDA\n\n");
+            return 0;
+        }
+    }
+    printf("\nPALABRA NO ES VALIDA\n\n");
+    return 1;
+};
