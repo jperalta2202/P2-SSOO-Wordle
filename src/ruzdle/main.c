@@ -45,9 +45,43 @@ int main (int argc, char *argv[]){
 
 
 
-    Partida* partida = nueva_partida(wordsList[10]);
+    // Partida* partida = nueva_partida(wordsList[10]);
 
-    comenzar_partida(partida, wordsListValids);
+    // comenzar_partida(partida, wordsListValids);
+
+    ///////////////////////// BLOQUE DE PRUEBA TOP 10
+    // Lista_partidas_terminadas* lista = partidas_terminadas_init();
+
+    // Partida_terminada* primera = partida_terminada_init("hello", 277, "Steve");
+
+    // append_partida(lista, primera);
+
+    // Partida_terminada* segunda = partida_terminada_init("mario", 3000, "George");
+
+    // append_partida(lista, segunda);
+
+    // Partida_terminada* tercera = partida_terminada_init("munoz", 3, "juan");
+    // append_partida(lista, tercera);
+
+    // Partida_terminada* cuarta = partida_terminada_init("smile", 5000, "miguel");
+    // append_partida(lista, cuarta);
+
+    // Partida_terminada* quinta = partida_terminada_init("slurm", 1500, "jose");
+    // append_partida(lista, quinta);
+
+    // Partida_terminada* sexta = partida_terminada_init("aloha", 1500, "vale");
+    // append_partida(lista, sexta);
+
+    // Partida_terminada* septima = partida_terminada_init("chick", 1500, "alonso");
+    // append_partida(lista, septima);
+
+
+    // printf(" \nllamo a print lista\n");
+    // print_top_10(lista);
+    // printf(" \n\n");
+
+
+    ///////////////////////// BLOQUE DE PRUEBA TOP 10
 
     fclose(wordsFile);
     for (int i = 0; i < 200; i++){
