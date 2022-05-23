@@ -99,7 +99,7 @@ void print_top_10(Lista_partidas_terminadas* lista){
     int posicion = 1;
     Partida_terminada* current = lista->head;
     while (current){
-        if (posicion == 11){
+        if (posicion == 8){
             break;
         };
         printf("%iº - %i - %s - %s \n", posicion, current->puntaje, current->nombre, current->palabra_secreta);
@@ -107,6 +107,26 @@ void print_top_10(Lista_partidas_terminadas* lista){
         current = current->next;
     };    
     
+};
+
+void destroy_lista(Lista_partidas_terminadas* lista)
+{
+    Partida_terminada* current = lista->head;
+    while(current){
+        if(current->next){
+            Partida_terminada* previous = current;
+            current = previous->next;
+            printf("Liberando a: %s \n",previous->nombre);
+            free(previous);
+
+        } else {
+            printf("Liberando a: %s \n",current->nombre);
+            free(current);
+            break;
+        };
+    }
+    free(lista);
+    printf("LISTA LIBERADA CORRECTAMENTE\n");
 };
 
 bool string_equals(char *string1, char *string2)

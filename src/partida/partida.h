@@ -45,6 +45,7 @@ Lista_partidas_terminadas* partidas_terminadas_init();
 
 Partida_terminada* partida_terminada_init(char* palabra_secreta, int puntaje, char*nombre);
 void append_partida(Lista_partidas_terminadas* lista, Partida_terminada* partida);
+void destroy_lista(Lista_partidas_terminadas* lista);
 
 void print_top_10(Lista_partidas_terminadas* lista);
 
