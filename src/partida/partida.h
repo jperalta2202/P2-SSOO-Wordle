@@ -25,7 +25,7 @@ struct Partida {
 
 Partida* nueva_partida(char* palabra_secreta);
 
-void nuevo_intento(char* intento);
+char* nuevo_intento(char* palabra_secreta, char* intento);
 
 void comenzar_partida(Partida* partida);
 

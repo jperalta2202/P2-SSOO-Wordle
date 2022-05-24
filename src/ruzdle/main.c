@@ -26,11 +26,6 @@ int main (int argc, char *argv[]){
         fiveLetterWord = malloc(6*sizeof(char));
     };
 
-    for (int i = 0; i < 200; i++){
-        printf("Palabra %i : %s \n",i, wordsList[i]);
-    };
-
-
     Partida* partida = nueva_partida(wordsList[10]);
 
     comenzar_partida(partida);
