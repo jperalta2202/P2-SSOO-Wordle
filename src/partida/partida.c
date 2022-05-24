@@ -135,7 +135,39 @@ bool string_equals(char *string1, char *string2)
 }
 
 
-void nuevo_intento(char* intento){
+char* nuevo_intento(char* palabra_secreta, char* intento){
+
+    printf("estoy en un intento\n");
+
+    char resultado[6] = {'X', 'X', 'X', 'X', 'X', '\0'};
+    bool pista[5] = {false, false, false, false, false};
+
+    for (int i = 0; i < 5; i++){
+
+        if (intento[i] == palabra_secreta[i]){
+
+            resultado[i] = 'H';
+            pista[i] = true;
+
+        } else {
+
+            for (int j = 0; j < 5; j++){
+
+                if (intento[i] == palabra_secreta[j] && !pista[j]){
+
+                    resultado[i] = 'Y';
+                    pista[j] = true;
+                    break;
+
+                } 
+
+            }
+
+        }
+
+    }
+
+    printf("resultado %s \n", resultado);
 
 }
 
@@ -155,9 +187,12 @@ void comenzar_partida(Partida* partida, char** lista_validas){
         // int puntaje = calcular_puntaje(partida);
         // printf("Puntaje deberia ser 277, es: %i \n", puntaje);
 
+        nuevo_intento(partida->palabra_secreta, intento);
+
 
         if (string_equals(partida->palabra_secreta, intento)){
             printf("ganaste\n");
+            run = 0;
         } else{
             printf("sigue intentando\n");
         }

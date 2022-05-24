@@ -41,6 +41,9 @@ typedef struct lista_partidas_terminadas {
 
 Partida* nueva_partida(char* palabra_secreta);
 
+<<<<<<< HEAD
+char* nuevo_intento(char* palabra_secreta, char* intento);
+=======
 Lista_partidas_terminadas* partidas_terminadas_init();
 
 Partida_terminada* partida_terminada_init(char* palabra_secreta, int puntaje, char*nombre);
@@ -50,6 +53,7 @@ void destroy_lista(Lista_partidas_terminadas* lista);
 void print_top_10(Lista_partidas_terminadas* lista);
 
 void nuevo_intento(char* intento);
+>>>>>>> aa65ce6c63d64e825db8322036d9962c0ac36948
 
 void comenzar_partida(Partida* partida, char** lista_validas);
 

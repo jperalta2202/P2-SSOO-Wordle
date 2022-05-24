@@ -28,6 +28,7 @@ int main (int argc, char *argv[]){
     };
     //
 
+    Partida* partida = nueva_partida(wordsList[10]);
     // CARGAR LISTA ARCHIVO PALABRAS_VALIDAS
     char** wordsListValids = calloc(MAX_WORDS_NUM_VALIDS, sizeof(char*));
     int word_count_valid = 0;
