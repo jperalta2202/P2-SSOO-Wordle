@@ -1,13 +1,14 @@
 #include "partida.h"
 
 
-Partida* nueva_partida(char* palabra_secreta){
+Partida* nueva_partida(char* palabra_secreta, char* user_name){
 
     Partida* new = malloc(sizeof(Partida));
 
     new -> intentos = 0;
     new -> palabra_secreta = palabra_secreta;
     new -> suma_incorrectas = 0;
+    new -> user_name = user_name;
 
     return new;
   
@@ -21,88 +22,83 @@ Partida_terminada* partida_terminada_init(char* palabra_secreta, int puntaje, ch
     new -> puntaje = puntaje;
     new -> nombre = nombre;
 
+    new -> prev = NULL;
+    new -> next = NULL;
+
     return new;
 
 }
 
 Lista_partidas_terminadas* partidas_terminadas_init(){
+
     Lista_partidas_terminadas* lista = malloc(sizeof(Lista_partidas_terminadas));
 
     lista -> head = NULL;
-    lista -> tail = NULL;
 
     return lista;
 };
 
 void append_partida(Lista_partidas_terminadas* lista, Partida_terminada* partida)  
 {
-    Partida_terminada* current = lista -> head;
-    if(!(current))
-    {
+
+    if (lista->head == NULL){
 
         lista -> head = partida;
-        lista -> tail = partida;
         return;
+
+    }
+
+    Partida_terminada* current = lista -> head;
+
+    //comparando con el primero
+
+    if(partida->puntaje > current->puntaje){
+
+        lista -> head = partida;
+        partida -> next = current;
+        current -> prev = partida;
+
     } else {
-        while(current){
-            if (current->puntaje > partida->puntaje){
-                // caso en que no es mejor que el mejor
-                if (current == lista -> tail){
-                    lista -> tail = partida;
-                    partida -> prev = current;
-                    current -> next = partida;
-                    return;
-                };
-                current = current->next;
 
-            } else if (current == lista->tail){
-                if (current->puntaje >= partida->puntaje){
-                    current->next = partida;
-                    partida->prev = current;
-                    lista->tail = partida;
-                } else if(current->puntaje < partida->puntaje){
-                    if (current->prev){
-                        partida->prev = current->prev;
-                        current->prev->next = partida;
-                        current->prev = partida;
-                    } else {
-                        lista->head = partida;
-                        current->prev = partida;
-                        partida->next = current;
-                    };
-                }
+        Partida_terminada* previus = current;
+        current = current -> next;
+
+        while(current) {
+
+            if(partida -> puntaje > current -> puntaje) {
+
+                previus -> next = partida;
+                current -> prev = partida;
+                partida -> next = current;
+                partida -> prev = current -> prev;
                 return;
 
-            } else if (current->puntaje <= partida->puntaje){
-                if(current == lista->head){
-                    lista->head = partida;
-                    partida->next = current;
-                    current->prev = partida;
-                } else {
-                    current->prev->next = partida;
-                    current->prev = partida;
-                    partida->prev = current->prev;
-                    partida->next = current;
-                };
+            }
 
-                return;
-            };
-        };
-    };
-    return;
-};
+            previus = current;
+            current = current -> next;
+
+            printf("dentro del while\n");
+        }
+
+        printf("fuera del while");
+        previus -> next = partida;
+        partida -> prev = previus;
+
+    }
+
+}
 
 void print_top_10(Lista_partidas_terminadas* lista){
-    printf("Imprimimos el top 10\n");
-    // primero seteamos los 10 primeros elementos de la lista como los top 10
-    // por mientras es top 3 pero despues se puede escalar
+
+    printf("LEADERBOARD\n");
+
     int posicion = 1;
     Partida_terminada* current = lista->head;
-    while (current){
-        if (posicion == 8){
-            break;
-        };
+    while (current && posicion < 11){
+  
         printf("%iº - %i - %s - %s \n", posicion, current->puntaje, current->nombre, current->palabra_secreta);
+
         posicion++;
         current = current->next;
     };    
@@ -116,18 +112,16 @@ void destroy_lista(Lista_partidas_terminadas* lista)
         if(current->next){
             Partida_terminada* previous = current;
             current = previous->next;
-            printf("Liberando a: %s \n",previous->nombre);
             free(previous);
 
         } else {
-            printf("Liberando a: %s \n",current->nombre);
             free(current);
             break;
         };
     }
     free(lista);
-    printf("LISTA LIBERADA CORRECTAMENTE\n");
 };
+
 
 bool string_equals(char *string1, char *string2)
 {
@@ -135,9 +129,8 @@ bool string_equals(char *string1, char *string2)
 }
 
 
-char* nuevo_intento(char* palabra_secreta, char* intento){
+void nuevo_intento(Partida* partida, char* palabra_secreta, char* intento){
 
-    printf("estoy en un intento\n");
 
     char resultado[6] = {'X', 'X', 'X', 'X', 'X', '\0'};
     bool pista[5] = {false, false, false, false, false};
@@ -155,7 +148,7 @@ char* nuevo_intento(char* palabra_secreta, char* intento){
 
                 if (intento[i] == palabra_secreta[j] && !pista[j]){
 
-                    resultado[i] = 'Y';
+                    resultado[i] = '?';
                     pista[j] = true;
                     break;
 
@@ -165,9 +158,13 @@ char* nuevo_intento(char* palabra_secreta, char* intento){
 
         }
 
+        if (resultado[i] == 'X'){
+            partida->suma_incorrectas += 1;
+        }
+
     }
 
-    printf("resultado %s \n", resultado);
+    printf("%s\n", resultado);
 
 }
 
@@ -178,27 +175,33 @@ void comenzar_partida(Partida* partida, char** lista_validas){
 
     while(run) {
 
-        printf("Inserte Palabra \n");
+        printf("Inserte palabra \n");
         scanf("%s", intento);
 
-        printf("Ingresaste la palabra %s \n", intento);
         int valida = word_is_valid(intento, lista_validas);
 
-        // int puntaje = calcular_puntaje(partida);
-        // printf("Puntaje deberia ser 277, es: %i \n", puntaje);
+        if(valida) {
 
-        nuevo_intento(partida->palabra_secreta, intento);
+            nuevo_intento(partida, partida->palabra_secreta, intento);
 
+            if (string_equals(partida->palabra_secreta, intento)){
 
-        if (string_equals(partida->palabra_secreta, intento)){
-            printf("ganaste\n");
-            run = 0;
-        } else{
-            printf("sigue intentando\n");
+                printf("Ganaste\n");
+                run = 0;
+
+            } else {
+
+                printf("Sigue intentando\n");
+
+            }
+
+            partida->intentos++;
+
+        } else {
+
+            printf("Ingresa una palabra valida\n");
+
         }
-        //aqui deberia ir el testeo del intento
-
-        partida->intentos++;
 
     }
     
@@ -207,16 +210,14 @@ void comenzar_partida(Partida* partida, char** lista_validas){
 int word_is_valid(char* string, char** lista_validas)
 {
     int largo = 12972;
-    int word_is_in_list = 1; // 1 significa que no está, 0 que si
+
     for (int i = 0; i < largo; i++) {
         int comparacion = strcmp(string, lista_validas[i]);
         if (comparacion == 0){
-            printf("\nPALABRA ES VALIDA\n\n");
-            return 0;
+            return 1;
         }
     }
-    printf("\nPALABRA NO ES VALIDA\n\n");
-    return 1;
+    return 0;
 };
 
 int calcular_puntaje(Partida* partida){
@@ -228,3 +229,9 @@ int calcular_puntaje(Partida* partida){
 
     return puntaje;
 };
+
+void destroy_partida(Partida* partida){
+
+    free(partida);
+
+}
