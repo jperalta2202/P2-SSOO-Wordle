@@ -26,9 +26,7 @@ int main (int argc, char *argv[]){
         word_count++;
         fiveLetterWord = malloc(6*sizeof(char));
     };
-    //
 
-    Partida* partida = nueva_partida(wordsList[10]);
     // CARGAR LISTA ARCHIVO PALABRAS_VALIDAS
     char** wordsListValids = calloc(MAX_WORDS_NUM_VALIDS, sizeof(char*));
     int word_count_valid = 0;
@@ -42,57 +40,88 @@ int main (int argc, char *argv[]){
         word_count_valid++;
         fiveLetterWordValid = malloc(6*sizeof(char));
     };
-    //
 
 
+    // INICIAMOS EL LEADERBOARD
 
-    // Partida* partida = nueva_partida(wordsList[10]);
-
-    // comenzar_partida(partida, wordsListValids);
-
-    ///////////////////////// BLOQUE DE PRUEBA TOP 10
     Lista_partidas_terminadas* lista = partidas_terminadas_init();
 
-    Partida_terminada* primera = partida_terminada_init("hello", 277, "Steve");
-
-    append_partida(lista, primera);
-
-    Partida_terminada* segunda = partida_terminada_init("mario", 3000, "George");
-
-    append_partida(lista, segunda);
-
-    Partida_terminada* tercera = partida_terminada_init("munoz", 3, "juan");
-    append_partida(lista, tercera);
-
-    Partida_terminada* cuarta = partida_terminada_init("smile", 5000, "miguel");
-    append_partida(lista, cuarta);
-
-    Partida_terminada* quinta = partida_terminada_init("slurm", 1700, "jose");
-    append_partida(lista, quinta);
-
-    Partida_terminada* sexta = partida_terminada_init("aloha", 1500, "vale");
-    append_partida(lista, sexta);
-
-    Partida_terminada* septima = partida_terminada_init("chick", 1000, "alonso");
-    append_partida(lista, septima);
 
 
-    printf(" \nllamo a print lista\n");
-    print_top_10(lista);
-    printf(" \n\n");
-    destroy_lista(lista);
+    // CICLO DE UNA PARTIDA
+
+    Partida* partida = nueva_partida(wordsList[18], "chino"); //creo la partida
+
+    comenzar_partida(partida, wordsListValids); // comienzo la partida, aqui va todo el flujo
+
+    int puntaje = calcular_puntaje(partida); //al terminar la partida, quedo toda la info guardada asi que la uso para calcular puntaje
+
+    Partida_terminada* primera = partida_terminada_init(partida->palabra_secreta, puntaje, partida->user_name); //creamos partida terminada
+    append_partida(lista, primera); // lo appendiamos a la lista
 
 
     ///////////////////////// BLOQUE DE PRUEBA TOP 10
+
+    // Partida_terminada* segunda = partida_terminada_init("mario", 3000, "George");
+    // append_partida(lista, segunda);
+
+    // Partida_terminada* tercera = partida_terminada_init("munoz", 5000, "juan");
+    // append_partida(lista, tercera);
+
+    // Partida_terminada* cuarta = partida_terminada_init("smile", 3000, "miguel");
+    // append_partida(lista, cuarta);
+
+    // Partida_terminada* quinta = partida_terminada_init("slurm", 4000, "jose");
+    // append_partida(lista, quinta);
+
+    // Partida_terminada* sexta = partida_terminada_init("aloha", 1700, "vale");
+    // append_partida(lista, sexta);
+
+    // Partida_terminada* septima = partida_terminada_init("chick", 1000, "alonso");
+    // append_partida(lista, septima);
+
+    // Partida_terminada* octaba = partida_terminada_init("holaa", 2, "carlos");
+    // append_partida(lista, octaba);
+
+    // Partida_terminada* novena = partida_terminada_init("asdas", 40001, "marcos");
+    // append_partida(lista, novena);
+
+    // Partida_terminada* decima = partida_terminada_init("rrrrr", 10000, "pato");
+    // append_partida(lista, decima);
+
+    // Partida_terminada* onceaba = partida_terminada_init("rrrrr", 100, "pato");
+    // append_partida(lista, onceaba);
+
+
+    ///////////////////////// BLOQUE DE PRUEBA TOP 10
+
+    print_top_10(lista);
+
+
+    // FREE DE TODO 
+
+    destroy_lista(lista); 
+
+    destroy_partida(partida);
+
+    free(fiveLetterWord);
+    free(fiveLetterWordValid);
+
 
     fclose(wordsFile);
     fclose(wordsFileValid);
-    for (int i = 0; i < 200; i++){
+
+    for (int i = 0; i < MAX_WORDS_NUM; i++){
         free(wordsList[i]);
     };
-    for (int i = 0; i < MAX_WORDS_NUM_VALIDS; i++){
-        free(wordsListValids[i]);
+
+    free(wordsList);
+
+    for (int r = 0; r < MAX_WORDS_NUM_VALIDS; r++){
+        free(wordsListValids[r]);
     };
+
+    free(wordsListValids);
 
 
   return 0;

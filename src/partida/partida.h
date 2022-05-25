@@ -21,6 +21,7 @@ struct Partida {
     char* palabra_secreta;
     int intentos;
     int suma_incorrectas;
+    char* user_name;
 };
 
 struct Partida_terminada {
@@ -28,32 +29,30 @@ struct Partida_terminada {
     char* palabra_secreta;
     int puntaje;
     char* nombre;
-    struct Partida_terminada* prev;
+
+    struct Partida_terminada* prev; 
     struct Partida_terminada* next; 
 
 };
 
 typedef struct lista_partidas_terminadas {
     struct Partida_terminada* head;
-    struct Partida_terminada* tail;
 
 } Lista_partidas_terminadas;
 
-Partida* nueva_partida(char* palabra_secreta);
+Partida* nueva_partida(char* palabra_secreta, char* user_name);
 
-<<<<<<< HEAD
-char* nuevo_intento(char* palabra_secreta, char* intento);
-=======
+void nuevo_intento(Partida* partida, char* palabra_secreta, char* intento);
+
 Lista_partidas_terminadas* partidas_terminadas_init();
 
 Partida_terminada* partida_terminada_init(char* palabra_secreta, int puntaje, char*nombre);
+
 void append_partida(Lista_partidas_terminadas* lista, Partida_terminada* partida);
+
 void destroy_lista(Lista_partidas_terminadas* lista);
 
 void print_top_10(Lista_partidas_terminadas* lista);
-
-void nuevo_intento(char* intento);
->>>>>>> aa65ce6c63d64e825db8322036d9962c0ac36948
 
 void comenzar_partida(Partida* partida, char** lista_validas);
 
@@ -62,3 +61,5 @@ bool string_equals(char *string1, char *string2);
 int word_is_valid(char* string, char** lista_validas);
 
 int calcular_puntaje(Partida* partida);
+
+void destroy_partida(Partida* partida);
